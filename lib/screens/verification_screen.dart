@@ -8,11 +8,9 @@ class Verification extends StatefulWidget {
 }
 
 class _VerificationState extends State<Verification> {
-  final List<TextEditingController> _codeControllers =
-  List.generate(5, (_) => TextEditingController());
+  final List<TextEditingController> _codeControllers = List.generate(5, (_) => TextEditingController());
 
-  final List<FocusNode> _focusNodes =
-  List.generate(5, (_) => FocusNode());
+  final List<FocusNode> _focusNodes = List.generate(5, (_) => FocusNode());
 
   @override
   void dispose() {
@@ -49,7 +47,6 @@ class _VerificationState extends State<Verification> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Campo de Email or Phone Number
                     const SizedBox(height: 30),
                     Center(
                       child: CircleAvatar(
@@ -96,12 +93,18 @@ class _VerificationState extends State<Verification> {
                             onChanged: (valor) {
                               if (valor.isNotEmpty) {
                                 if (index < 4) {
-                                  FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
+                                  FocusScope.of(
+                                    context,
+                                  ).requestFocus(_focusNodes[index + 1]);
                                 } else {
-                                  FocusScope.of(context).unfocus(); // Oculta el teclado
+                                  FocusScope.of(
+                                    context,
+                                  ).unfocus(); // Oculta el teclado
                                 }
                               } else if (valor.isEmpty && index > 0) {
-                                FocusScope.of(context).requestFocus(_focusNodes[index - 1]);
+                                FocusScope.of(
+                                  context,
+                                ).requestFocus(_focusNodes[index - 1]);
                               }
                             },
                           ),
@@ -116,7 +119,6 @@ class _VerificationState extends State<Verification> {
                 onPressed: () {
                   String code = _codeControllers.map((c) => c.text).join();
                   debugPrint('Código ingresado: $code');
-                  // Aquí puedes agregar validación o enviar a backend
                 },
 
                 style: ElevatedButton.styleFrom(
@@ -145,7 +147,7 @@ class _VerificationState extends State<Verification> {
                         debugPrint('test');
                       },
                       child: Text(
-                        ' Resend',
+                        'Resend',
                         style: TextStyle(
                           color: Color(0xFFFF8A00),
                           fontWeight: FontWeight.bold,

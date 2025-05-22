@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "32033187924",
+    "project_id": "turnify-moviles",
+    "storage_bucket": "turnify-moviles.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:32033187924:android:2719d42feb3a03bc74e5c1",
+        "android_client_info": {
+          "package_name": "com.example.services_booking_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "32033187924-2aekul0d0r6cim7p2ue0ktbl0jbc6ta9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2O5y1jESjtEWvJz2XQ3bWN8UkvWc2Gq0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "32033187924-2aekul0d0r6cim7p2ue0ktbl0jbc6ta9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

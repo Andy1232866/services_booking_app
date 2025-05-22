@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:services_booking_app/services/auth_services.dart';
 import 'package:services_booking_app/widgets/text_form_field_custom.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -75,7 +77,22 @@ class _LoginState extends State<Login> {
               ),
               SizedBox(height: 30),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  String email = _emailOrPhone.text.trim();
+                  String password = _password.text.trim();
+
+                  final AuthServices auth = AuthServices();
+
+                  User? user = await auth.signIn(email, password);
+
+                  if (user != null && user.emailVerified) {
+                    debugPrint('Bienvenido $email');
+                    Navigator.pushReplacementNamed(context, '/homepage');
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: const Text('Please, verify your email')));
+                  }
+                },
                 style: ElevatedButton.styleFrom(
                   elevation: 1.0,
                   backgroundColor: const Color(0xFFFEA800),
@@ -100,7 +117,19 @@ class _LoginState extends State<Login> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  AuthServices auth = AuthServices();
+
+                  User? user = await auth.signInWithGoogle();
+
+                  if (user != null) {
+                    debugPrint('Bienvenido ${user.email}');
+
+                    if (context.mounted) {
+                      Navigator.pushReplacementNamed(context, '/homepage');
+                    }
+                  }
+                },
                 style: ElevatedButton.styleFrom(
                   elevation: 0.0,
                   minimumSize: const Size(300, 50),
