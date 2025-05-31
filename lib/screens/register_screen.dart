@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:services_booking_app/services/firestore_service.dart';
 import 'package:services_booking_app/services/auth_services.dart';
 import 'package:services_booking_app/screens/email_verification_screen.dart';
 import 'package:services_booking_app/widgets/text_form_field_custom.dart';
@@ -18,6 +19,9 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
+
+    FirestoreService firestoreServices = FirestoreService();
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
@@ -70,15 +74,54 @@ class _RegisterState extends State<Register> {
                 onPressed: () async {
                   String email = _emailOrPhone.text.trim();
                   String password = _password.text.trim();
+                  String username = _username.text.trim();
+
+                  if (username.isEmpty || email.isEmpty || password.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Color(0xFFFEA800),
+                        content: const Text(
+                          'Please, enter your credentials',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    );
+                    return;
+                  }
 
                   final AuthServices auth = AuthServices();
+                  User? user = await auth.signUp(email, password, username);
 
-                  User? user = await auth.signUp(email, password);
+                  if (user == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Color(0xFFFEA800),
+                        content: Text(
+                          'Invalid Credentials, please try again',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    );
+                  } else if (context.mounted) {
 
-                  if (user != null && context.mounted) {
+                    final String userName = _username.text;
+                    final String email = _emailOrPhone.text;
+
                     debugPrint('Usuario creado con el email $email');
+
+                    firestoreServices.saveUserData(user.uid, userName, email);
+
                     Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => EmailVerificationScreen(email: email)),
+                      MaterialPageRoute(
+                        builder:
+                            (context) => EmailVerificationScreen(email: email),
+                      ),
                     );
                   }
                 },

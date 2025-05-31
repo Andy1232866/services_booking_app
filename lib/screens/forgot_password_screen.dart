@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:services_booking_app/widgets/text_form_field_custom.dart';
+import 'package:services_booking_app/services/auth_services.dart';
 
 class Forgot extends StatefulWidget {
   const Forgot({super.key});
@@ -10,6 +11,8 @@ class Forgot extends StatefulWidget {
 
 class _ForgotState extends State<Forgot> {
   final TextEditingController _emailOrPhone = TextEditingController();
+  
+  final AuthServices _authServices = AuthServices();
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +55,13 @@ class _ForgotState extends State<Forgot> {
               ),
               SizedBox(height: 45),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/verification');
+                onPressed: () async {
+
+                  final String email = _emailOrPhone.text;
+
+                  await _authServices.sendPasswordResetEmail(email);
+
+                  Navigator.popAndPushNamed(context, '/login');
                 },
                 style: ElevatedButton.styleFrom(
                   elevation: 1.0,
@@ -62,7 +70,7 @@ class _ForgotState extends State<Forgot> {
                   splashFactory: NoSplash.splashFactory,
                 ),
                 child: const Text(
-                  'Send Code',
+                  'Send Email',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:services_booking_app/widgets/carousel_custom_widget.dart';
-import 'package:services_booking_app/widgets/services_widget.dart';
-import 'package:services_booking_app/widgets/see_all_widget.dart';
+import 'package:services_booking_app/widgets/navigator_bar.dart';
+import 'package:services_booking_app/screens/my_bookings.dart';
+import 'package:services_booking_app/screens/my_home.dart';
+import 'package:services_booking_app/screens/my_calendar.dart';
+import 'package:services_booking_app/screens/inbox.dart';
+import 'package:services_booking_app/screens/profile.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,118 +17,151 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  final List<Widget> _pages = [
+    MyHome(),
+    MyBookings(),
+    MyCalendar(),
+    Inbox(),
+    Profile(),
+  ];
+
+  Map<String, dynamic>? userNamed;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserName();
+  }
+
+  Future<void> fetchUserName() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid != null) {
+      final doc =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      if (doc.exists) {
+        setState(() {
+          userNamed = doc.data();
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                CircleAvatar(backgroundColor: Colors.red),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Good Morning', style: TextStyle(fontSize: 12)),
-                    Text(
-                      'Adison Rosser',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Icon(Icons.notifications_outlined),
-                Icon(Icons.bookmark_border_outlined),
-              ],
-            ),
-          ],
-        ),
+      appBar: getAppBar(_selectedIndex),
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: NavigatorBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
       ),
-      body: Padding(
-        padding: EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
-        child: Column(
-          children: [
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Search Here',
-                hintStyle: TextStyle(
-                  color: Color(0xFF787A7D),
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
-                prefixIcon: Icon(
-                  Icons.search_outlined,
-                  color: const Color(0xFF787A7D),
-                ),
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.tune_outlined, color: Color(0xFF787A7D)),
-                  onPressed: () {
-                    debugPrint('Test');
-                  },
-                ),
-                filled: true,
-                fillColor: const Color(0xFFF5F5F5),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-            const SizedBox(height: 15),
+    );
+  }
 
-            SeeAllWidget(section: 'Special Offers', redirect: '/offers'),
-
-            SizedBox(
-              height: 150, // altura fija necesaria
-              child: CarouselView.weighted(
-                backgroundColor: Color(0xFFF5F5F5),
-                flexWeights: [1],
-                itemSnapping: true,
-                shrinkExtent: 320,
+  PreferredSizeWidget? getAppBar(int index) {
+    switch (index + 1) {
+      case 1:
+        return AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
                 children: [
-                  CarouselCustomWidget(
-                    discount: '30%',
-                    description:
-                        'Get discount for every\norder. Only valid for today',
-                    imagePath: 'lib/assets/images/imagen_1.png',
-                  ),
-
-                  CarouselCustomWidget(
-                    discount: '20%',
-                    description: 'Weekend deal only.\nDon’t miss out',
-                    imagePath: 'lib/assets/images/imagen_2.png',
-                  ),
-
-                  CarouselCustomWidget(
-                    discount: '10%',
-                    description: 'Book now and get\ninstant cashback',
-                    imagePath: 'lib/assets/images/imagen_3.png',
+                  CircleAvatar(backgroundColor: Colors.red),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(getGreeting(), style: TextStyle(fontSize: 12)),
+                      Text(
+                        userNamed != null ? userNamed!['username'] ?? '' : '',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ),
+              Row(
+                children: [
+                  Icon(Icons.notifications_outlined),
+                  Icon(Icons.bookmark_border_outlined),
+                ],
+              ),
+            ],
+          ),
+        );
+      case 2:
+        return AppBar(
+          title: const Text(
+            'Bookings',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+          centerTitle: true,
+        );
+      case 3:
+        return AppBar(
+          title: const Text(
+            'Calendar',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+          centerTitle: true,
+        );
+      case 4:
+        return AppBar(
+          title: const Text(
+            'Inbox',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+          centerTitle: true,
+        );
+      case 5:
+        return AppBar(
+          title: const Text(
+            'Profile',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+          centerTitle: true,
+        );
+      default:
+        return AppBar(
+          title: const Text(
+            'Error!',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+          centerTitle: true,
+        );
+    }
+  }
 
-            SeeAllWidget(section: 'Services', redirect: '/all_services'),
+  /*
+  Método para obtener la hora:
+  1. En la variable hora guardamos la hora actual del momento (en vivo)
+  2. Si la hora es mayor o igual a las 5hrs y menos a las 12hrs entonces retorna "Buenos días"
+  3. Si la hora es mayor o igual a las 12hrs y menor a las 18hrs entonces retorna "Buenas tardes"
+  4. Si ninfuno de los 2 se cumple entonces retorna buenas noches
+   */
+  String getGreeting() {
+    final hour = DateTime.now().hour; // Obtiene la hora
 
-            ServicesWidget(),
-
-            SizedBox(height: 10),
-
-            SeeAllWidget(
-              section: 'Most Popular Services',
-              redirect: '/popular_services',
-            ),
-          ],
-        ),
-      ),
-    );
+    if (hour >= 5 && hour < 12) {
+      // De 5hrs a 12hrs es buenos días
+      return 'Good Morning';
+    } else if (hour >= 12 && hour < 18) {
+      // de 12hrs a 18hrs es buenas tardes
+      return 'Good Afternoon';
+    } else {
+      return 'Good Night'; // Si no es ninguno entonces buenas noches
+    }
   }
 }

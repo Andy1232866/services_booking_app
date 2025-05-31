@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:services_booking_app/services/firestore_service.dart';
 
 class AuthServices {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<User?> signUp(String email, String password) async {
+  Future<User?> signUp(String email, String password, String username) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
         email: email.trim(),
@@ -17,6 +18,9 @@ class AuthServices {
       if (user != null) {
         debugPrint('Usuario creado con el correo: $email');
         await user.sendEmailVerification();
+
+        await FirestoreService().saveUserData(user.uid, username, email);
+
         return user;
       } else {
         debugPrint('No se pudo crear el usuario');
@@ -70,5 +74,9 @@ class AuthServices {
         .signInWithCredential(credential);
 
     return userCredential.user;
+  }
+
+  Future<void> sendPasswordResetEmail(String email) async {
+    await _auth.sendPasswordResetEmail(email: email.trim());
   }
 }

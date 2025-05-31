@@ -46,3 +46,4 @@ app.*.map.json
 
 # Variables de entorno
 lib/secrets.dart
+lib/firebase_options.dart

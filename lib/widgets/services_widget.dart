@@ -7,7 +7,7 @@ class ServicesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        debugPrint('Test');
+        Navigator.pushReplacementNamed(context, '/cleaning');
       },
       child: Column(
         children: [
@@ -18,9 +18,9 @@ class ServicesWidget extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     backgroundColor: Color(0xFFF2E9FF),
-                    radius: 35,
+                    radius: 30,
                     child: CircleAvatar(
-                      radius: 25,
+                      radius: 20,
                       backgroundColor: Color(0xFFF2E9FF),
                       child: Image.asset('lib/assets/icons/cleaning.png'),
                     ),
@@ -36,9 +36,9 @@ class ServicesWidget extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     backgroundColor: Color(0xFFFFEBF0),
-                    radius: 35,
+                    radius: 30,
                     child: CircleAvatar(
-                      radius: 25,
+                      radius: 20,
                       backgroundColor: Color(0xFFFFEBF0),
                       child: Image.asset('lib/assets/icons/painting.png'),
                     ),
@@ -54,9 +54,9 @@ class ServicesWidget extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     backgroundColor: Color(0xFFFFFAE5),
-                    radius: 35,
+                    radius: 30,
                     child: CircleAvatar(
-                      radius: 25,
+                      radius: 20,
                       backgroundColor: Color(0xFFFFFAE5),
                       child: Image.asset('lib/assets/icons/laundry.png'),
                     ),
@@ -72,9 +72,9 @@ class ServicesWidget extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     backgroundColor: Color(0xFFF7F0FB),
-                    radius: 35,
+                    radius: 30,
                     child: CircleAvatar(
-                      radius: 25,
+                      radius: 20,
                       backgroundColor: Color(0xFFF7F0FB),
                       child: Image.asset('lib/assets/icons/repairing.png'),
                     ),
@@ -96,9 +96,9 @@ class ServicesWidget extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     backgroundColor: Color(0xFFFFEDEC),
-                    radius: 35,
+                    radius: 30,
                     child: CircleAvatar(
-                      radius: 25,
+                      radius: 20,
                       backgroundColor: Color(0xFFFFEDEC),
                       child: Image.asset('lib/assets/icons/appliance.png'),
                     ),
@@ -114,9 +114,9 @@ class ServicesWidget extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     backgroundColor: Color(0xFFECFBEF),
-                    radius: 35,
+                    radius: 30,
                     child: CircleAvatar(
-                      radius: 25,
+                      radius: 20,
                       backgroundColor: Color(0xFFECFBEF),
                       child: Image.asset('lib/assets/icons/plumbing.png'),
                     ),
@@ -132,9 +132,9 @@ class ServicesWidget extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     backgroundColor: Color(0xFFEAF6FD),
-                    radius: 35,
+                    radius: 30,
                     child: CircleAvatar(
-                      radius: 25,
+                      radius: 20,
                       backgroundColor: Color(0xFFEAF6FD),
                       child: Image.asset('lib/assets/icons/shifting.png'),
                     ),
@@ -150,7 +150,7 @@ class ServicesWidget extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     backgroundColor: Color(0x33FEA800),
-                    radius: 35,
+                    radius: 30,
                     child: CircleAvatar(
                       radius: 20,
                       backgroundColor: Color(0xFFFEA800),

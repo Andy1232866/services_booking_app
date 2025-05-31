@@ -46,7 +46,7 @@ class _LoginState extends State<Login> {
                     const SizedBox(height: 15),
                     TextFormFieldCustom(
                       label: 'Password',
-                      hintText: 'Create your password',
+                      hintText: 'Enter your password',
                       icon: Icons.lock_outline,
                       controller: _password,
                       isPassword: true,
@@ -62,9 +62,7 @@ class _LoginState extends State<Login> {
                     onPressed: () {
                       Navigator.pushReplacementNamed(context, '/forgot');
                     },
-                    style: ButtonStyle(
-                      splashFactory: NoSplash.splashFactory,
-                    ),
+                    style: ButtonStyle(splashFactory: NoSplash.splashFactory),
                     child: Text(
                       'Forgot password?',
                       style: TextStyle(
@@ -81,16 +79,60 @@ class _LoginState extends State<Login> {
                   String email = _emailOrPhone.text.trim();
                   String password = _password.text.trim();
 
-                  final AuthServices auth = AuthServices();
+                  /* Estos if's lo que hacen es validar:
+                  1. En caso de que alguno de los 2 campos (email y password) estén vacíos pide introducir las credenciales
+                  2. Si el user devuelve null muestra que las credenciales son inválidas
+                  3. En caso de que el user devuelva diferente de verificado (no verificado) pide que se verifique el correo
+                  4. Si ninguno de lo anterior se cumple entonces redirige al usuario a la página de home */
 
+                  if (email.isEmpty || password.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Color(0xFFFEA800),
+                        content: const Text(
+                          'Please, enter your credentials',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    );
+                    return;
+                  }
+
+                  final AuthServices auth = AuthServices();
                   User? user = await auth.signIn(email, password);
 
-                  if (user != null && user.emailVerified) {
+                  if (user == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Color(0xFFFEA800),
+                        content: const Text(
+                          'Invalid credentials, please try again',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    );
+                  } else if (!user.emailVerified) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Color(0xFFFEA800),
+                        content: const Text(
+                          'Please, verify your email',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
                     debugPrint('Bienvenido $email');
                     Navigator.pushReplacementNamed(context, '/homepage');
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: const Text('Please, verify your email')));
                   }
                 },
                 style: ElevatedButton.styleFrom(
