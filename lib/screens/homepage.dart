@@ -104,7 +104,7 @@ class _HomePageState extends State<HomePage> {
       case 2:
         return AppBar(
           title: const Text(
-            'Bookings',
+            'My Bookings',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
           centerTitle: true,
@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
       case 3:
         return AppBar(
           title: const Text(
-            'Calendar',
+            'My Calendar',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
           centerTitle: true,

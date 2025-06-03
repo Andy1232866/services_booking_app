@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:services_booking_app/services/supabase_services.dart';
+import 'package:services_booking_app/screens/booking.dart';
 
 class ServiceDetailsPage extends StatefulWidget {
   final int serviceId;
@@ -180,8 +181,10 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
                       ),
                       ElevatedButton(
                         onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => Booking(serviceId: widget.serviceId)));
                         },
                         style: ElevatedButton.styleFrom(
+                          minimumSize: Size(200, 50),
                           padding: const EdgeInsets.symmetric(
                             horizontal: 32,
                             vertical: 16,

@@ -11,7 +11,6 @@ import 'package:services_booking_app/screens/verification_screen.dart';
 import 'package:services_booking_app/screens/homepage.dart';
 import 'package:services_booking_app/screens/offers.dart';
 import 'package:services_booking_app/screens/popular_services.dart';
-import 'package:services_booking_app/screens/cleaning_page.dart';
 
 import 'secrets.dart';
 
@@ -50,7 +49,6 @@ class MyApp extends StatelessWidget {
         '/homepage': (context) => const HomePage(),
         '/offers': (context) => const Offers(),
         '/popular_services': (context) => const PopularServices(),
-        '/cleaning': (context) => const CleaningPage(),
       },
     );
   }

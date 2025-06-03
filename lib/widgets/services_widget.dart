@@ -7,7 +7,7 @@ class ServicesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushReplacementNamed(context, '/cleaning');
+        debugPrint('Hola');
       },
       child: Column(
         children: [
